@@ -189,5 +189,6 @@ void QHttpResponse::end(const QByteArray &data)
 void QHttpResponse::connectionClosed()
 {
     m_finished = true;
+    emit done();
     deleteLater();
 }
