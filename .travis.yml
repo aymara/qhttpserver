@@ -1,9 +1,9 @@
 language: cpp
 compiler: gcc
-env: 
+env:
   global:
-    - secure: FlsmywHiGR6VKejCGcEd59rhvk5YI1f+FUAWfBLVxzqG4haLGT0MQwyxDr2EPS3Iu+v16nsMxHT2dwMCotC8zTPSmHUr6evE4jpNcqs+vIOAz7VLjdqwD0jweeguOR4JxL1XcgFZMAPTnoQFBFZlEOFu8OxaDjOoG7Oj0iGH+Fo=
-    - Qt5_DIR=/opt/qt53
+  - secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
+  - Qt5_DIR=/opt/qt53
 install:
 - cat /etc/*-release
 - echo `echo 2 | sudo update-alternatives --config gcc`
@@ -15,7 +15,9 @@ install:
 - sudo apt-get install -qq -y qt53base qt53tools
 script: pwd && mkdir dist && mkdir build && cd build && cmake .. && make && make package
 after_success:
-- curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
-- curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
+- curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb
+  -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
+- curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb
+  -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
 - curl -XPOST -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/publish
 - curl -XGET https://bintray.com/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER
