@@ -3,6 +3,7 @@ compiler: gcc
 env: 
   global:
     - secure: FlsmywHiGR6VKejCGcEd59rhvk5YI1f+FUAWfBLVxzqG4haLGT0MQwyxDr2EPS3Iu+v16nsMxHT2dwMCotC8zTPSmHUr6evE4jpNcqs+vIOAz7VLjdqwD0jweeguOR4JxL1XcgFZMAPTnoQFBFZlEOFu8OxaDjOoG7Oj0iGH+Fo=
+    - Qt5_DIR=/opt/qt53
 install:
 - cat /etc/*-release
 - echo `echo 2 | sudo update-alternatives --config gcc`
