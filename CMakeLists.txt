@@ -57,6 +57,11 @@ set(CMAKE_PREFIX_PATH
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -lpthread")
 
+# It is necessary to define Qt5_INSTALL_DIR in your environment.
+set(CMAKE_PREFIX_PATH  
+  "$ENV{Qt5_INSTALL_DIR}"
+  "${CMAKE_PREFIX_PATH}" 
+)
 
 find_package(Qt5 REQUIRED Core Network)
 set(Qt5_INCLUDES ${Qt5_INCLUDES} ${Qt5Core_INCLUDE_DIRS}  ${Qt5Network_INCLUDE_DIRS})
