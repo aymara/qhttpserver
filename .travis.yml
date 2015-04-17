@@ -11,7 +11,7 @@ install:
 - sudo apt-get install -qq -y cmake gdb
 - sudo add-apt-repository --yes ppa:beineri/opt-qt532
 - sudo apt-get update -qq
-- sudo apt-get install -qq -y qt53-meta
+- sudo apt-get install -qq -y qt53base qt53tools
 script: pwd && mkdir dist && mkdir build && cd build && cmake .. && make && make package
 after_success:
 - curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
