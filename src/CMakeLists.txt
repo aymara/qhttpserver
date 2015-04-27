@@ -31,4 +31,5 @@ install(FILES
     qhttpresponse.h
     qhttpserver.h
     qhttpserverapi.h
+    qhttpserverfwd.h
   DESTINATION include)
