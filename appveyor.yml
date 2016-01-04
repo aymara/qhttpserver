@@ -29,7 +29,7 @@ build_script:
   - ps: $headers = @{ Authorization = $basicAuthValue }
   - ps: $commit = $Env:APPVEYOR_REPO_COMMIT
   - ps: $commit  = $commit.substring(0,7)
-  #- ps: Invoke-RestMethod  -Method PUT -Headers $headers -uri https://api.bintray.com/content/kleag/windows64/qhttpserver/$Env:APPVEYOR_BUILD_NUMBER/$Env:APPVEYOR_BUILD_NUMBER/limacommon-2.1.$commit-win64.exe?publish=1 -Infile C:/b/lima_common/src/lima_common-build/limacommon-2.1.-win64.exe
+  - ps: Invoke-RestMethod  -Method PUT -Headers $headers -uri https://api.bintray.com/content/kleag/windows64/qhttpserver/$Env:APPVEYOR_BUILD_NUMBER/$Env:APPVEYOR_BUILD_NUMBER/qhttpserver-0.0.$commit-win64.exe?publish=1 -Infile C:/b/qhttpserver-0.0.1-win64.exe
 
 
 on_failure:
