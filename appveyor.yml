@@ -17,6 +17,8 @@ build_script:
   - cd c:\b
   - cmake -G "Visual Studio 12 2013 Win64" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" c:/projects/qhttpserver
   - cmake --build . --config Release
+  - cmake --build . --config Release --target PACKAGE
+  
 
   - ps: $user = "kleag"
   - ps: $pass = $Env:BINTRAYKEY
