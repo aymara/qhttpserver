@@ -12,7 +12,7 @@ class BodyData : public QObject
 public:
     BodyData();
 
-private slots:
+private Q_SLOTS:
     void handleRequest(QHttpRequest *req, QHttpResponse *resp);
 };
 
@@ -26,10 +26,10 @@ public:
     Responder(QHttpRequest *req, QHttpResponse *resp);
     ~Responder();
 
-signals:
+Q_SIGNALS:
     void done();
 
-private slots:
+private Q_SLOTS:
     void accumulate(const QByteArray &data);
     void reply();
 

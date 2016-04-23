@@ -74,7 +74,7 @@ void QHttpResponse::writeHeaders()
     if (m_finished)
         return;
 
-    foreach(const QString & name, m_headers.keys()) {
+    Q_FOREACH(const QString & name, m_headers.keys()) {
         QString value = m_headers[name];
         if (name.compare("connection", Qt::CaseInsensitive) == 0) {
             m_sentConnectionHeader = true;
@@ -172,7 +172,7 @@ void QHttpResponse::end(const QByteArray &data)
         write(data);
     m_finished = true;
 
-    emit done();
+    Q_EMIT done();
 
     /// @todo End connection and delete ourselves. Is this a still valid note?
     deleteLater();
@@ -181,6 +181,6 @@ void QHttpResponse::end(const QByteArray &data)
 void QHttpResponse::connectionClosed()
 {
     m_finished = true;
-    emit done();
+    Q_EMIT done();
     deleteLater();
 }

@@ -41,11 +41,11 @@ public:
     void write(const QByteArray &data);
     void flush();
 
-signals:
+Q_SIGNALS:
     void newRequest(QHttpRequest *, QHttpResponse *);
     void allBytesWritten();
 
-private slots:
+private Q_SLOTS:
     void parseRequest();
     void responseDone();
     void socketDisconnected();

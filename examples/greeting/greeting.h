@@ -11,6 +11,6 @@ class Greeting : public QObject
 public:
     Greeting();
 
-private slots:
+private Q_SLOTS:
     void handleRequest(QHttpRequest *req, QHttpResponse *resp);
 };

@@ -11,6 +11,6 @@ class HelloWorld : public QObject
 public:
     HelloWorld();
 
-private slots:
+private Q_SLOTS:
     void handleRequest(QHttpRequest *req, QHttpResponse *resp);
 };
