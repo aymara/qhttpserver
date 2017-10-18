@@ -1,6 +1,12 @@
 project(qhttpserver)
 cmake_minimum_required(VERSION 2.8)
 
+if (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
+    if ("x${CMAKE_BUILD_TYPE}" STREQUAL "xRelease")
+      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mtune=generic -march=x86-64")
+    endif()
+endif()
+
 #enable_testing()
 
 include(SystemSpecificInformations.cmake)
