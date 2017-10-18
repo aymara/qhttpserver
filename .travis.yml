@@ -6,7 +6,7 @@ services:
 
 env:
   global:
-    secure: X7vYsdnuullrVSCuHtTdO9m252YBijzqXzsaj0QIqS45vUrqafY7QS4B2/QYpEX14LN3G9/KjSO/QntY9v6xOsfH1KwhTpCRpjRataivi8uaYGK5LwL7mf3kmNeWbl4jzyUrXDcL9a2JReKlCtAGbNs73NcIMuHhXbqlJBr0Pus=
+    secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
 
 before_install:
   - docker pull ubuntu:16.04 
