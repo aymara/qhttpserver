@@ -1,21 +1,18 @@
+sudo: required
+
 language: cpp
-compiler: gcc
+services:
+  - docker
+
 env:
   global:
-  - secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
-  - Qt5_DIR=/opt/qt53
-install:
-- cat /etc/*-release
-- echo `echo 2 | sudo update-alternatives --config gcc`
-- sudo add-apt-repository --yes ppa:kubuntu-ppa/backports
-- sudo apt-get update
-- sudo apt-get install -qq -y cmake gdb
-- sudo add-apt-repository --yes ppa:beineri/opt-qt532
-- sudo apt-get update -qq
-- sudo apt-get install -qq -y qt53base qt53tools
-script: pwd && mkdir dist && mkdir build && cd build && cmake .. && make && make package
-after_success:
-- curl -T /home/travis/build/aymara/qhttpserver/build/qhttpserver-0.0.1-Linux.deb
-  -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
-- curl -XPOST -ukleag:$BINTRAYKEY https://api.bintray.com/content/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER/publish
-- curl -XGET https://bintray.com/kleag/ubuntu-12.04/qhttpserver/$TRAVIS_JOB_NUMBER
+    secure: X7vYsdnuullrVSCuHtTdO9m252YBijzqXzsaj0QIqS45vUrqafY7QS4B2/QYpEX14LN3G9/KjSO/QntY9v6xOsfH1KwhTpCRpjRataivi8uaYGK5LwL7mf3kmNeWbl4jzyUrXDcL9a2JReKlCtAGbNs73NcIMuHhXbqlJBr0Pus=
+
+before_install:
+  - docker pull ubuntu:16.04 
+  - docker pull ubuntu:14.04 
+
+script:
+- docker build --build-arg BINTRAYKEY=$BINTRAYKEY  --build-arg TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 .
+- docker build --build-arg BINTRAYKEY=$BINTRAYKEY  --build-arg TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu14.04 .
+
