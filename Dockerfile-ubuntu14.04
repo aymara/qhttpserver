@@ -5,10 +5,7 @@ ARG TRAVIS_JOB_NUMBER
 
 # Setup
 RUN apt-get update -y -qq
-RUN apt-get install -y apt-utils -qq
-RUN apt-get install -y git gcc g++ autotools-dev dh-autoreconf cmake cmake-data curl -qq
-RUN apt-get install -y qt5-default qtbase5-dev-tools qtdeclarative5-dev -qq
-RUN apt-get update -y -qq
+RUN apt-get install -y apt-utils git gcc g++ cmake cmake-data ninja-build qt5-default qtbase5-dev-tools qtdeclarative5-dev -qq
 RUN mkdir -p /src/
 RUN git clone https://github.com/aymara/qhttpserver /src/qhttpserver
 
@@ -16,11 +13,5 @@ RUN mkdir -p /src/qhttpserver/build
  
 # Build
 WORKDIR /src/qhttpserver/build
-RUN cmake ..
-RUN make -j4
-RUN make package
-RUN curl -T /src/qhttpserver/build/qhttpserver-0.0.1-Linux.deb \
-  -ukleag:$BINTRAYKEY \
-  https://api.bintray.com/content/kleag/ubuntu-14.04/qhttpserver/$TRAVIS_JOB_NUMBER/$TRAVIS_JOB_NUMBER/qhttpserver-0.0.1-Linux.deb
-RUN curl -XPOST -ukleag:$BINTRAYKEY \
-  https://api.bintray.com/content/kleag/ubuntu-14.04/qhttpserver/$TRAVIS_JOB_NUMBER/publish
+RUN cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ..
+RUN ninja package
