@@ -3,7 +3,7 @@ init:
 
 branches:
   except:
-    - /\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+/
+    - /.*\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+.*/
 
 environment:
   QTDIR: 'C:\Qt\5.11.0\msvc2015_64'
@@ -42,18 +42,14 @@ build_script:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - cmake -G "Ninja" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_IGNORE_PATH=C:/msys64/usr/bin" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
   - cmake --build . --config Release
-  
+  - cmake --build . --target package --config Release
 
-  #- ps: $user = "kleag"
-  #- ps: $pass = $Env:BINTRAYKEY
-  #- ps: $pair = "${user}:${pass}"
-  #- ps: $bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)
-  #- ps: $base64 = [System.Convert]::ToBase64String($bytes)
-  #- ps: $basicAuthValue = "Basic $base64"
-  #- ps: $headers = @{ Authorization = $basicAuthValue }
-  #- ps: $commit = $Env:APPVEYOR_REPO_COMMIT
-  #- ps: $commit  = $commit.substring(0,7)
-  #- ps: Invoke-RestMethod  -Method PUT -Headers $headers -uri https://api.bintray.com/content/kleag/windows64/qhttpserver/$Env:APPVEYOR_BUILD_NUMBER/$Env:APPVEYOR_BUILD_NUMBER/qhttpserver-0.0.$commit-win64.exe?publish=1 -Infile C:/b/qhttpserver-0.0.1-win64.exe
+
+after_build:
+  - ps: pushd C:\b\qhttpserver\src\qhttpserver-build
+  - copy qhttpserver*.exe %APPVEYOR_BUILD_FOLDER%
+  - ps: popd
+
 
 artifacts: 
   - path: qhttpserver*.exe
@@ -72,4 +68,7 @@ deploy:
 
 
 on_failure:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+on_success:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
