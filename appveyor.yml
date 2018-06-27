@@ -1,35 +1,57 @@
 init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
+branches:
+  except:
+  - /^\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+$/
+
 environment:
   QTDIR: 'C:\Qt\5.5\msvc2013_64'
   PATH: '%QTDIR%\bin;c:\d\bin;%PATH%'
-  BINTRAYKEY:
-    secure: SF9KK/1ShDAudlHJFsZro1MQOaYqjJ0Hb2mbJEvFyxPCLHtevjyxuLT1IrsSmE1o
+  GITHUB_OAUTH_TOKEN:
+    secure: 01sh5OxKgkUJbTt/ldX/duLQk6iP28Iwet3reW8FK8f7Z3xiM2RLHQUwOzZye4qs
 
 configuration: Release
 
-os: Visual Studio 2013
+os: Visual Studio 2015
 
 
 build_script:
   - mkdir c:\b
   - cd c:\b
-  - cmake -G "Visual Studio 12 2013 Win64" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" c:/projects/qhttpserver
+  - ps: $env:VERSION_RELEASE="$(git log --date=iso  -1 | grep Date | sed -e 's/Date:\ *//' -e 's/\+.*//' -e 's/[- :]//g')-$(git log --format=%h --abbrev=8 -1)"
+  - echo %VERSION_RELEASE%
+
+  - cmake -G "Visual Studio 12 2013 Win64" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
   - cmake --build . --config Release
   - cmake --build . --config Release --target PACKAGE
   
 
-  - ps: $user = "kleag"
-  - ps: $pass = $Env:BINTRAYKEY
-  - ps: $pair = "${user}:${pass}"
-  - ps: $bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)
-  - ps: $base64 = [System.Convert]::ToBase64String($bytes)
-  - ps: $basicAuthValue = "Basic $base64"
-  - ps: $headers = @{ Authorization = $basicAuthValue }
-  - ps: $commit = $Env:APPVEYOR_REPO_COMMIT
-  - ps: $commit  = $commit.substring(0,7)
-  - ps: Invoke-RestMethod  -Method PUT -Headers $headers -uri https://api.bintray.com/content/kleag/windows64/qhttpserver/$Env:APPVEYOR_BUILD_NUMBER/$Env:APPVEYOR_BUILD_NUMBER/qhttpserver-0.0.$commit-win64.exe?publish=1 -Infile C:/b/qhttpserver-0.0.1-win64.exe
+  #- ps: $user = "kleag"
+  #- ps: $pass = $Env:BINTRAYKEY
+  #- ps: $pair = "${user}:${pass}"
+  #- ps: $bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)
+  #- ps: $base64 = [System.Convert]::ToBase64String($bytes)
+  #- ps: $basicAuthValue = "Basic $base64"
+  #- ps: $headers = @{ Authorization = $basicAuthValue }
+  #- ps: $commit = $Env:APPVEYOR_REPO_COMMIT
+  #- ps: $commit  = $commit.substring(0,7)
+  #- ps: Invoke-RestMethod  -Method PUT -Headers $headers -uri https://api.bintray.com/content/kleag/windows64/qhttpserver/$Env:APPVEYOR_BUILD_NUMBER/$Env:APPVEYOR_BUILD_NUMBER/qhttpserver-0.0.$commit-win64.exe?publish=1 -Infile C:/b/qhttpserver-0.0.1-win64.exe
+
+artifacts: 
+  - path: qhttpserver*.exe
+    name: packages
+
+deploy:
+  description: '$(VERSION_RELEASE)'
+  provider: GitHub
+  tag: $(VERSION_RELEASE)
+  auth_token:
+    secure: 01sh5OxKgkUJbTt/ldX/duLQk6iP28Iwet3reW8FK8f7Z3xiM2RLHQUwOzZye4qs
+  artifact: packages
+  force_update: true
+
+
 
 
 on_failure:
