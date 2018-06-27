@@ -15,6 +15,21 @@ configuration: Release
 
 os: Visual Studio 2015
 
+install:
+  ############################################################################
+  # All external dependencies are installed in C:\externals
+  ############################################################################
+  - mkdir C:\externals
+  - cd C:\externals
+
+  ############################################################################
+  # Install Ninja
+  ############################################################################
+  - appveyor DownloadFile https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip -FileName ninja.zip
+  - 7z x ninja.zip -oC:\externals\ninja > nul
+  - set PATH=C:\externals\ninja;%PATH%
+  - ninja --version
+
 
 build_script:
   - ps: $env:VERSION_RELEASE="$(git log --date=iso  -1 | grep Date | sed -e 's/Date:\ *//' -e 's/\+.*//' -e 's/[- :]//g')-$(git log --format=%h --abbrev=8 -1)"
@@ -22,7 +37,8 @@ build_script:
   - mkdir c:\b
   - cd c:\b
 
-  - cmake -G "Visual Studio 12 2013 Win64" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - cmake -G "Ninja" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_IGNORE_PATH="C:/msys64/usr/bin" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
   - cmake --build . --config Release
   - cmake --build . --config Release --target PACKAGE
   
