@@ -40,7 +40,7 @@ build_script:
   - cd c:\b
 
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - cmake -G "Ninja" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_IGNORE_PATH="C:/msys64/usr/bin" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
+  - cmake -G "Ninja" "-DCMAKE_PREFIX_PATH=%QTDIR%" "-DCMAKE_IGNORE_PATH=C:/msys64/usr/bin" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=c:\d" "-DVERSION_RELEASE:STRING=%VERSION_RELEASE%" c:/projects/qhttpserver
   - cmake --build . --config Release
   - cmake --build . --config Release --target PACKAGE
   
