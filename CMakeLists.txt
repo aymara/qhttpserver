@@ -97,7 +97,7 @@ add_subdirectory(src)
 ########### packaging ###############
 INCLUDE(InstallRequiredSystemLibraries)
 
-if(not ${VERSION_RELEASE})
+if(NOT DEFINED VERSION_RELEASE)
   set(VERSION_RELEASE "1")
 endif()
 
