@@ -1,9 +1,9 @@
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
+#init:
+  #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 branches:
   except:
-    - /.*\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+.*/
+    - /^\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+$/
+
 
 environment:
   QTDIR: 'C:\Qt\5.11.0\msvc2015_64'
