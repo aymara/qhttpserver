@@ -3,7 +3,7 @@ init:
 
 branches:
   except:
-  - /^\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+$/
+    - /\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+/
 
 environment:
   QTDIR: 'C:\Qt\5.11.0\msvc2015_64'
