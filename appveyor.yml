@@ -6,7 +6,7 @@ branches:
   - /^\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+$/
 
 environment:
-  QTDIR: 'C:\Qt\5.5\msvc2013_64'
+  QTDIR: 'C:\Qt\5.8\msvc2015_64'
   PATH: '%QTDIR%\bin;c:\d\bin;%PATH%'
   GITHUB_OAUTH_TOKEN:
     secure: 01sh5OxKgkUJbTt/ldX/duLQk6iP28Iwet3reW8FK8f7Z3xiM2RLHQUwOzZye4qs
