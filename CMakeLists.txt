@@ -34,6 +34,9 @@ if (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
       set(CMAKE_CXX_FLAGS "-DNO_STDCPP0X ${CMAKE_CXX_FLAGS}")
     endif (HAVE_STDCPP11)
     set(CMAKE_CXX_FLAGS "-W -Wall ${CMAKE_CXX_FLAGS}")
+    
+    set(LIB_INSTALL_DIR "lib")
+
 else (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
   message("Windows flags")
   add_definitions(-D WIN32)
@@ -45,6 +48,11 @@ else (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
 
 #   set(CMAKE_C_FLAGS "/Zc:wchar_t- /EHsc /GR ${CMAKE_C_FLAGS}")
 #   set(CMAKE_CXX_FLAGS "/Zc:wchar_t- /EHsc /GR /W4 /MP /FAu ${CMAKE_CXX_FLAGS}")
+
+  set(LIB_INSTALL_DIR "bin")
+
+  install(FILES ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+    DESTINATION bin)
 
 endif (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
 
