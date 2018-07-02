@@ -69,13 +69,31 @@ set(CMAKE_PREFIX_PATH
   "${CMAKE_PREFIX_PATH}" 
 )
 
-add_definitions(-DQT_NO_KEYWORDS)
-find_package(Qt5 REQUIRED Core Network)
-set(Qt5_INCLUDES ${Qt5_INCLUDES} ${Qt5Core_INCLUDE_DIRS}  ${Qt5Network_INCLUDE_DIRS})
-set(Qt5_LIBRARIES ${Qt5_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Network_LIBRARIES} )
 
-include_directories(${Qt5_INCLUDES})
-set(QT_LIBRARIES "${Qt5_LIBRARIES}")
+
+add_definitions(-DQT_NO_KEYWORDS)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
+if (NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -DQT_DEPRECATED_WARNINGS")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_COMPILING_QSTRING_COMPAT_CPP -D_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS")
+endif()
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+find_package(Qt5 REQUIRED COMPONENTS Core Network)
+set(Qt5_LIBRARIES  Qt5::Core Qt5::Network )
+message("Found Qt5 ${Qt5Core_VERSION}")
+
+message("\n\n\n{Qt5_LIBRARIES}=${Qt5_LIBRARIES} ")
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  get_target_property(QtCore_location Qt5::Core LOCATION)
+  get_target_property(QtNetwork_location Qt5::Network LOCATION)
+  install(FILES ${QtCore_location}
+                ${QtNetwork_location}
+          DESTINATION ${LIB_INSTALL_DIR})
+endif ()
 
 add_subdirectory(src)
 #add_subdirectory(test)
@@ -95,6 +113,15 @@ add_subdirectory(src)
 #endif(DOXYGEN_FOUND)
 
 ########### packaging ###############
+# Specify additional runtime libraries that may not be detected. After 
+# inclusion any detected libraries will be appended to this.
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS 
+  ${QtCore_location}
+  ${QtNetwork_location}
+)
+
+set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
+set(MAKE_INSTALL_UCRT_LIBRARIES TRUE)
 INCLUDE(InstallRequiredSystemLibraries)
 
 if(NOT DEFINED VERSION_RELEASE)
