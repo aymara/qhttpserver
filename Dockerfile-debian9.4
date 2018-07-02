@@ -4,7 +4,7 @@ ARG TRAVIS_JOB_NUMBER
 
 # Setup
 RUN apt-get update -y -qq
-RUN apt-get install -y apt-utils git gcc g++ cmake cmake-data ninja-build qt5-default qtbase5-dev-tools qtdeclarative5-dev -qq
+RUN apt-get install -y apt-utils wget git gcc g++ cmake cmake-data ninja-build qt5-default qtbase5-dev-tools qtdeclarative5-dev -qq
 RUN mkdir -p /src/
 RUN git clone https://github.com/aymara/qhttpserver /src/qhttpserver
 
