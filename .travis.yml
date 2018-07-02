@@ -24,7 +24,7 @@ script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
 
 after_success:
 - docker run -t -d travis-ubuntu16.04
-- docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages $HOME
+- docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
 - docker stop travis-ubuntu16.04
 - docker run -t -d debian9.4
 - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
