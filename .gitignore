@@ -3,7 +3,8 @@
 
 
 # Folders
-build
+build/
+pack/
 lib
 .kdev4
 
