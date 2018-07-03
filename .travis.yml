@@ -22,21 +22,16 @@ matrix:
 script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
   -f ./Dockerfile-$DISTRIB .
 
-after_success:
-- docker run -t -d travis-ubuntu16.04
-- docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
-- docker stop travis-ubuntu16.04
-- docker run -t -d debian9.4
-- docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
-
-stages:
-  - test
-  - before_deploy
-  - deploy
-
 jobs:
   include:
-    - stage: test
+    - stage: after_success
+      after_success:
+      - docker run -t -d travis-ubuntu16.04
+      - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
+      - docker stop travis-ubuntu16.04
+      - docker run -t -d debian9.4
+      - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
+
     - stage: before_deploy
       before_deploy:
         git config --local user.name "Gael de Chalendar"
