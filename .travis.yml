@@ -36,6 +36,7 @@ stages:
 
 jobs:
   include:
+    - stage: test
     - stage: before_deploy
       before_deploy:
         git config --local user.name "Gael de Chalendar"
