@@ -26,6 +26,7 @@ jobs:
   include:
     - stage: test
       script: docker build --tag ubuntu16.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 .
+    - 
       script: docker build --tag debian9.4 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-debian9.4 .
     - stage: finish
       script: skip
