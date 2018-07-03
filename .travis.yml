@@ -24,20 +24,18 @@ script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
 
 jobs:
   include:
-    - stage: after_success
+    - stage: finish
+      script: /bin/true
       after_success:
       - docker run -t -d travis-ubuntu16.04
       - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
       - docker stop travis-ubuntu16.04
       - docker run -t -d debian9.4
       - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
-
-    - stage: before_deploy
       before_deploy:
         git config --local user.name "Gael de Chalendar"
         git config --local user.email "kleag@free.fr"
         git tag "$(git log --date=iso  -1 | grep Date | sed -e 's/Date:\ *//' -e 's/\+.*//' -e 's/[- :]//g')-$(git log --format=%h --abbrev=8 -1)" || true
-    - stage: deploy
       deploy:
         provider: releases
         api_key:
