@@ -7,25 +7,28 @@ branches:
 services:
 - docker
 
-env:
-  global:
-    secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
+#env:
+  #global:
+    #secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
 
-matrix:
-  include:
-      - os: linux
-        env: DISTRIB=ubuntu16.04
-      - os: linux
-        env: DISTRIB=debian9.4
+#matrix:
+  #include:
+      #- os: linux
+        #env: DISTRIB=ubuntu16.04
+      #- os: linux
+        #env: DISTRIB=debian9.4
 
 
-script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
-  -f ./Dockerfile-$DISTRIB .
+#script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
+  #-f ./Dockerfile-$DISTRIB .
 
 jobs:
   include:
+    - stage: test
+      script: docker build --tag ubuntu16.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 .
+      script: docker build --tag debian9.4 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-debian9.4 .
     - stage: finish
-      script: /bin/true
+      script: skip
       after_success:
       - docker run -t -d travis-ubuntu16.04
       - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
