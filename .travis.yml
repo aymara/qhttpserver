@@ -29,7 +29,7 @@ jobs:
     -
       script: docker build --tag debian9.4 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-debian9.4 . && docker run -t -d debian9.4 && docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
     - stage: finish
-      script: skip
+      script: ls $HOME/packages/*.deb
       before_deploy:
         git config --local user.name "Gael de Chalendar"
         git config --local user.email "kleag@free.fr"
