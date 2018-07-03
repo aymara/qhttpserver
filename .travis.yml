@@ -25,14 +25,9 @@ services:
 jobs:
   include:
     - stage: test
-      script:
-      - docker build --tag ubuntu16.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 .
-      - docker run -t -d ubuntu16.04
-      - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
-    - 
-      script: docker build --tag debian9.4 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-debian9.4 .
-      - docker run -t -d debian9.4
-      - docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
+      script: docker build --tag ubuntu16.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 . && docker run -t -d ubuntu16.04 && docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
+    -
+      script: docker build --tag debian9.4 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-debian9.4 . && docker run -t -d debian9.4 && docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME
     - stage: finish
       script: skip
       before_deploy:
