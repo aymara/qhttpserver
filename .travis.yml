@@ -19,7 +19,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: $GITHUBKEY
+          secure: F16J7J9a+VNEBwSiAksWxnF7c1M8Zg0+Tg8WGRRYy2p5aqR83Gj8/3M+SIPNw/Dzxj8+Sid1QkIZ42jISzoDKO3bJ0cX7ymqGy3bwqMMsue6l2TAa/heJKpaGroyLtjZRgD2pGtHigC8W1BOEz+5KhVBwWAYDF92TpluvyklGoA=
         file_glob: true
         file: $HOME/packages/*.deb
         skip_cleanup: true
@@ -38,7 +38,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: $GITHUBKEY
+          secure: F16J7J9a+VNEBwSiAksWxnF7c1M8Zg0+Tg8WGRRYy2p5aqR83Gj8/3M+SIPNw/Dzxj8+Sid1QkIZ42jISzoDKO3bJ0cX7ymqGy3bwqMMsue6l2TAa/heJKpaGroyLtjZRgD2pGtHigC8W1BOEz+5KhVBwWAYDF92TpluvyklGoA=
         file_glob: true
         file: $HOME/packages/*.deb
         skip_cleanup: true
@@ -57,7 +57,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: $GITHUBKEY
+          secure: F16J7J9a+VNEBwSiAksWxnF7c1M8Zg0+Tg8WGRRYy2p5aqR83Gj8/3M+SIPNw/Dzxj8+Sid1QkIZ42jISzoDKO3bJ0cX7ymqGy3bwqMMsue6l2TAa/heJKpaGroyLtjZRgD2pGtHigC8W1BOEz+5KhVBwWAYDF92TpluvyklGoA=
         file_glob: true
         file: $HOME/packages/*.deb
         skip_cleanup: true
