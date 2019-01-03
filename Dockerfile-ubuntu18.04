@@ -1,0 +1,19 @@
+FROM ubuntu:18.04
+
+# Setup
+RUN apt-get update -y -qq
+RUN apt-get install -y apt-utils wget bzip2 git gcc g++ cmake cmake-data ninja-build qt5-default qtbase5-dev-tools qtdeclarative5-dev -qq
+RUN mkdir -p /src/
+RUN git clone https://github.com/aymara/qhttpserver /src/qhttpserver
+
+RUN mkdir -p /src/qhttpserver/build
+ 
+# Build
+WORKDIR /src/qhttpserver/build
+RUN cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ..
+RUN ninja package
+RUN install -D /src/qhttpserver/build/qhttpserver-0.0.1-Linux.deb /usr/share/apps/qhttpserver/packages/qhttpserver-0.0.1-ubuntu16.04.deb
+
+## install github-release to be able to deploy packages
+#RUN wget https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2 && tar xjf linux-amd64-github-release.tar.bz2 && cp bin/linux/amd64/github-release /usr/bin
+

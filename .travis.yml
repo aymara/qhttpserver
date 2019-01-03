@@ -8,24 +8,28 @@ branches:
 services:
 - docker
 
-#env:
-  #global:
-    #secure: X7BkOUOR2nt35IxLFFmpTPAVcgQ/SuSbuanXAheDj1tY4F+7MgEl/kDa+QV0mNG3EIvRhkY4+pmcBjgux8SF4MfPiFPD7XG7V0LPbHRWEWfzLIzJkVeErA8IAqwI0/IWQXEOOmQ9ElRygaKX1Tdot1piV99DSw+eGhtLnGIedKo=
-
-#matrix:
-  #include:
-      #- os: linux
-        #env: DISTRIB=ubuntu16.04
-      #- os: linux
-        #env: DISTRIB=debian9.4
-
-
-#script: docker build --tag $DISTRIB --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER
-  #-f ./Dockerfile-$DISTRIB .
-
 jobs:
   include:
     - stage: test
+      script: docker build --tag ubuntu18.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu18.04 . && docker run -t -d ubuntu18.04 && docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME && ls $HOME/packages/
+      before_deploy:
+        git config --local user.name "Gael de Chalendar"
+        git config --local user.email "kleag@free.fr"
+        git tag "$(git log --date=iso  -1 | grep Date | sed -e 's/Date:\ *//' -e 's/\+.*//' -e 's/[- :]//g')-$(git log --format=%h --abbrev=8 -1)" || true
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUBKEY
+        file_glob: true
+        file: $HOME/packages/*.deb
+        skip_cleanup: true
+        on:
+          repo: aymara/qhttpserver
+          tags: false
+          branches:
+            except:
+            - /^\d\d\d\d\d\d\d\d\d\d\d\d\d\d-[\da-f]+$/
+    -
       script: docker build --tag ubuntu16.04 --build-arg JOB_NUMBER=$TRAVIS_JOB_NUMBER -f ./Dockerfile-ubuntu16.04 . && docker run -t -d ubuntu16.04 && docker cp $(docker ps -n 1 -q):/usr/share/apps/qhttpserver/packages/ $HOME && ls $HOME/packages/
       before_deploy:
         git config --local user.name "Gael de Chalendar"
@@ -34,7 +38,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: F16J7J9a+VNEBwSiAksWxnF7c1M8Zg0+Tg8WGRRYy2p5aqR83Gj8/3M+SIPNw/Dzxj8+Sid1QkIZ42jISzoDKO3bJ0cX7ymqGy3bwqMMsue6l2TAa/heJKpaGroyLtjZRgD2pGtHigC8W1BOEz+5KhVBwWAYDF92TpluvyklGoA=
+          secure: $GITHUBKEY
         file_glob: true
         file: $HOME/packages/*.deb
         skip_cleanup: true
@@ -53,7 +57,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: F16J7J9a+VNEBwSiAksWxnF7c1M8Zg0+Tg8WGRRYy2p5aqR83Gj8/3M+SIPNw/Dzxj8+Sid1QkIZ42jISzoDKO3bJ0cX7ymqGy3bwqMMsue6l2TAa/heJKpaGroyLtjZRgD2pGtHigC8W1BOEz+5KhVBwWAYDF92TpluvyklGoA=
+          secure: $GITHUBKEY
         file_glob: true
         file: $HOME/packages/*.deb
         skip_cleanup: true
