@@ -10,7 +10,7 @@ SET(qhttpserver_LIB_SRCS
   qhttpresponse.cpp
   qhttpserver.cpp
   ../http-parser/http_parser.c
-  ../http-parser/url_parser.c
+  ../http-parser/contrib/url_parser.c
 )
 
 add_library(qhttpserver SHARED ${qhttpserver_LIB_SRCS})
