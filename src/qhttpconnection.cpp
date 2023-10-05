@@ -61,7 +61,6 @@ QHttpConnection::QHttpConnection(QTcpSocket *socket, QObject *parent)
 
 QHttpConnection::~QHttpConnection()
 {
-    delete m_socket;
     m_socket = 0;
 
     free(m_parser);
@@ -73,15 +72,18 @@ QHttpConnection::~QHttpConnection()
 
 void QHttpConnection::socketDisconnected()
 {
+    invalidateRequest();
+    m_socket->deleteLater();
     deleteLater();
+}
 
-    if (m_request) {
-        if (m_request->successful())
-            return;
 
-        m_request->setSuccessful(false);
+void QHttpConnection::invalidateRequest()
+{
+    if (m_request && !m_request->successful()) {
         Q_EMIT m_request->end();
     }
+    m_request = NULL;
 }
 
 void QHttpConnection::updateWriteCount(qint64 count)
@@ -119,6 +121,10 @@ void QHttpConnection::flush()
     m_socket->flush();
 }
 
+void QHttpConnection::waitForBytesWritten()
+{
+    m_socket->waitForBytesWritten();
+}
 void QHttpConnection::responseDone()
 {
     QHttpResponse *response = qobject_cast<QHttpResponse *>(QObject::sender());
@@ -141,7 +147,7 @@ QUrl createUrl(const char *urlData, const http_parser_url &urlInfo)
     url.setScheme(CHECK_AND_GET_FIELD(urlData, urlInfo, UF_SCHEMA));
     url.setHost(CHECK_AND_GET_FIELD(urlData, urlInfo, UF_HOST));
     // Port is dealt with separately since it is available as an integer.
-    url.setPath(CHECK_AND_GET_FIELD(urlData, urlInfo, UF_PATH));
+    url.setPath(CHECK_AND_GET_FIELD(urlData, urlInfo, UF_PATH), QUrl::TolerantMode);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     url.setQuery(CHECK_AND_GET_FIELD(urlData, urlInfo, UF_QUERY));
 #else
@@ -177,6 +183,9 @@ int QHttpConnection::MessageBegin(http_parser *parser)
     // The QHttpRequest should not be parented to this, since it's memory
     // management is the responsibility of the user of the library.
     theConnection->m_request = new QHttpRequest(theConnection);
+    // Invalidate the request when it is deleted to prevent keep-alive requests
+    // from calling a signal on a deleted object.
+    connect(theConnection->m_request, SIGNAL(destroyed(QObject*)), theConnection, SLOT(invalidateRequest()));
     return 0;
 }
 
