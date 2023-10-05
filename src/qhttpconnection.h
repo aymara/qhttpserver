@@ -40,6 +40,7 @@ public:
 
     void write(const QByteArray &data);
     void flush();
+    void waitForBytesWritten();
 
 Q_SIGNALS:
     void newRequest(QHttpRequest *, QHttpResponse *);
@@ -49,6 +50,7 @@ private Q_SLOTS:
     void parseRequest();
     void responseDone();
     void socketDisconnected();
+    void invalidateRequest();
     void updateWriteCount(qint64);
 
 private:
