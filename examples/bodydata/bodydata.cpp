@@ -16,13 +16,13 @@ BodyData::BodyData()
     QHttpServer *server = new QHttpServer(this);
     connect(server, SIGNAL(newRequest(QHttpRequest*, QHttpResponse*)),
         this, SLOT(handleRequest(QHttpRequest*, QHttpResponse*)));
-        
+
     server->listen(QHostAddress::Any, 8080);
 }
 
 void BodyData::handleRequest(QHttpRequest *req, QHttpResponse *resp)
 {
-    new Responder(req, resp);
+  Responder* resp = new Responder(req, resp);
 }
 
 /// Responder
@@ -42,7 +42,7 @@ Responder::Responder(QHttpRequest *req, QHttpResponse *resp)
 
     resp->setHeader("Content-Type", "text/html");
     resp->writeHead(200);
-    
+
     QString name = exp.capturedTexts()[1];
     QString bodyStart = tr("<html><head><title>BodyData App</title></head><body><h1>Hello %1!</h1><p>").arg(name);
     resp->write(bodyStart.toUtf8());
