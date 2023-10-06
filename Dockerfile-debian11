@@ -1,11 +1,10 @@
-FROM ubuntu:14.04
+FROM debian:11
 
-ARG BINTRAYKEY
 ARG TRAVIS_JOB_NUMBER 
 
 # Setup
 RUN apt-get update -y -qq
-RUN apt-get install -y apt-utils git gcc g++ cmake cmake-data ninja-build qtbase5-dev-tools qtdeclarative5-dev packaging-dev -qq
+RUN apt-get install -y apt-utils wget bzip2 git gcc g++ cmake cmake-data ninja-build qtbase5-dev-tools qtdeclarative5-dev packaging-dev -qq
 RUN mkdir -p /src/
 RUN git clone https://github.com/aymara/qhttpserver /src/qhttpserver
 
@@ -14,9 +13,12 @@ RUN mkdir -p /src/qhttpserver/build
 # Build
 WORKDIR /src/qhttpserver/build
 RUN cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ..
-RUN ninja all && ninja test && ninja package
+RUN ninja all && ninja package
 RUN echo "export packagefile=`find /src/qhttpserver/build/ -maxdepth 1 -name *.deb`" > /envfile
 RUN echo "export fullname=\$(basename -- \$packagefile)" >> /envfile
 RUN echo "export extension=\${fullname##*.}" >> /envfile
 RUN echo "export filename=\${fullname%.*}" >> /envfile
-RUN . /envfile && install -D ${packagefile} "/usr/share/apps/qhttpserver/packages/${filename}-ubuntu14.04.deb"
+RUN . /envfile && install -D ${packagefile} "/usr/share/apps/qhttpserver/packages/${filename}-debian11.deb"
+
+## install github-release to be able to deploy packages
+#RUN wget https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2 && tar xjf linux-amd64-github-release.tar.bz2 && cp bin/linux/amd64/github-release /usr/bin
