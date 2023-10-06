@@ -1,0 +1,63 @@
+on:
+  push:
+    branches:
+    - master
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  # MANYLINUX_TAG: "2022-10-25-fbea779"
+  # github.repository as <account>/<repo>
+  # PYTHON_VERSION: "3.7"
+  # PYTHON_SHORT_VERSION: "cp37-cp37m"
+  # PYTHON_FULL_VERSION: "3.7.13"
+  # QT_VERSION_MAJOR: "5"
+  # QT_VERSION_MINOR: "15"
+  # QT_VERSION_PATCH: "2"
+  # QT_VERSION: "5.15"
+  # QT_FULL_VERSION: "5.15.2"
+  # PYSIDE_VERSION: "2"
+  # LLVM_VERSION: "14.0.6"
+  # GCC_VERSION: "10.1.0"
+
+
+jobs:
+
+  ubuntu22_04_qhttpserver:
+    name: "Build the package for Ubuntu 22.04"
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.2.0
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          swap-storage: true
+
+      - name: "Build image"
+        run: docker build -f ./Dockerfile-ubuntu22.04 -t aymara/qhttpserver-ubuntu22.04:build .
+
+      - name: "Extract package from image . Still need to set the artifact as a release"
+        run: dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
+              id=$(docker run -d "$dockerImage" sleep infinity) \
+              && echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile \
+              && docker exec $id ls /usr/share/apps/qhttpserver/packages/ >> ./envFile \
+              && echo "export filename=\$(basename -- \$fullname)" >> ./envFile \
+              && . envFile && docker cp $id:$fullname - > ./$filename \
+              && docker stop $id \
+              && docker rm -v $id
+        
