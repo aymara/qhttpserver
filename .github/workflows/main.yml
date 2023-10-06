@@ -53,7 +53,7 @@ jobs:
 
       - name: "Extract package from image . Still need to set the artifact as a release"
         run: dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
-              id=$(docker run -d "$dockerImage" sleep infinity) \
+              && id=$(docker run -d "$dockerImage" sleep infinity) \
               && echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile \
               && docker exec $id ls /usr/share/apps/qhttpserver/packages/ >> ./envFile \
               && echo "export filename=\$(basename -- \$fullname)" >> ./envFile \
