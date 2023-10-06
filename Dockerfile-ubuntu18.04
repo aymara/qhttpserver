@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Setup
 RUN apt-get update -y -qq
 RUN apt-get install -y apt-utils wget bzip2 git gcc g++ cmake cmake-data ninja-build qtbase5-dev-tools qtdeclarative5-dev- packaging-dev -qq

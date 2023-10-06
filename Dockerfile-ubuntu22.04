@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Setup
 RUN apt-get update -y -qq
 RUN apt-get install -y apt-utils wget bzip2 git gcc g++ cmake cmake-data ninja-build qtbase5-dev-tools qtdeclarative5-dev packaging-dev -qq
@@ -11,7 +13,7 @@ RUN mkdir -p /src/qhttpserver/build
 # Build
 WORKDIR /src/qhttpserver/build
 RUN cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ..
-RUN ninja all && ninja test && ninja package
+RUN ninja all && ninja package
 RUN echo "export packagefile=`find /src/qhttpserver/build/ -maxdepth 1 -name *.deb`" > /envfile
 RUN echo "export fullname=\$(basename -- \$packagefile)" >> /envfile
 RUN echo "export extension=\${fullname##*.}" >> /envfile

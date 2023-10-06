@@ -1,6 +1,7 @@
 FROM debian:11
 
-ARG TRAVIS_JOB_NUMBER 
+ARG TRAVIS_JOB_NUMBER
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Setup
 RUN apt-get update -y -qq
