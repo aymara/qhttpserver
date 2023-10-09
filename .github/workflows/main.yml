@@ -46,8 +46,8 @@ jobs:
              echo "export trimmed=\$(basename \$filename .deb)" >> ./envFile
              echo "tmp=\${trimmed#*-}" >> ./envFile
              echo "export version=\${tmp%-*}" >> ./envFile
-             echo "::set-output name=filename::$(. envFile && echo $filename)"
-             echo "::set-output name=version::$(. envFile && echo $version)"
+             echo "filename=$(. envFile && echo $filename)" >> $GITHUB_OUTPUT
+             echo "version=$(. envFile && echo $version)"  >> $GITHUB_OUTPUT
              . envFile && docker cp $id:$fullname - > ./$filename
              docker stop $id
              docker rm -v $id
@@ -58,8 +58,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.extract.outputs.version }}
-          tag_name: ${{ github.ref }}
+          release_name: ${{ steps.extract.outputs.verion }}
+          tag_name: ${{ steps.extract.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload package
