@@ -39,7 +39,7 @@ jobs:
         run: |
              dockerImage="aymara/qhttpserver-debian11:build" 
              packageDir="/usr/share/apps/qhttpserver/packages/"
-             cicd/extract_package.sh
+             cicd/extract_package.sh $dockerImage $packageDir
       - name: Create release
         uses: ncipollo/release-action@v1.13.0
         id: create_release
@@ -89,7 +89,7 @@ jobs:
         run: |
              dockerImage="aymara/qhttpserver-ubuntu22.04:build" 
              packageDir="/usr/share/apps/qhttpserver/packages/"
-             cicd/extract_package.sh
+             cicd/extract_package.sh $dockerImage $packageDir
       - name: Create release
         uses: ncipollo/release-action@v1.13.0
         id: create_release
