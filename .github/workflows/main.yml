@@ -51,6 +51,7 @@ jobs:
         
       - name: Extract package and version number from docker iamge
         id: extract
+        shell: bash
         run: dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
               && id=$(docker run -d "$dockerImage" sleep infinity) \
               && echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile \
