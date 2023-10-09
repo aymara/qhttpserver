@@ -36,19 +36,21 @@ jobs:
         
       - name: Extract package and version number from docker iamge
         id: extract
-        run: bash -c 'dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
-              && id=$(docker run -d "$dockerImage" sleep infinity) \
-              && echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile \
-              && docker exec $id ls /usr/share/apps/qhttpserver/packages/ >> ./envFile \
-              && echo "export filename=\$(basename -- \$fullname)" >> ./envFile \
-              && echo "export trimmed=\$(basename \$filename .deb)" >> ./envFile \
-              && echo "tmp=\${trimmed#*-}" >> ./envFile \
-              && echo "export version=\${tmp%-*}" >> ./envFile \
-              && echo "::set-output name=filename::$(. envFile && echo $filename)" \
-              && echo "::set-output name=version::$(. envFile && echo $version)" \
-              && . envFile && docker cp $id:$fullname - > ./$filename \
-              && docker stop $id \
-              && docker rm -v $id'
+        shell: bash
+        run: |
+             dockerImage="aymara/qhttpserver-ubuntu22.04:build" 
+             id=$(docker run -d "$dockerImage" sleep infinity)
+             echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile
+             docker exec $id ls /usr/share/apps/qhttpserver/packages/ >> ./envFile
+             echo "export filename=\$(basename -- \$fullname)" >> ./envFile
+             echo "export trimmed=\$(basename \$filename .deb)" >> ./envFile
+             echo "tmp=\${trimmed#*-}" >> ./envFile
+             echo "export version=\${tmp%-*}" >> ./envFile
+             echo "::set-output name=filename::$(. envFile && echo $filename)"
+             echo "::set-output name=version::$(. envFile && echo $version)"
+             . envFile && docker cp $id:$fullname - > ./$filename
+             docker stop $id
+             docker rm -v $id'
         
       - name: Create release
         uses: actions/create-release@v1
