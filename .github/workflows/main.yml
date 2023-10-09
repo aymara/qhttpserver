@@ -44,8 +44,8 @@ jobs:
               && echo "export trimmed=\$(basename \$filename .deb)" >> ./envFile \
               && echo "tmp=\${trimmed#*-}" >> ./envFile \
               && echo "export version=\${tmp%-*}" >> ./envFile \
-              && echo "::set-output name=filename::$(. envFile && echo $filename)"
-              && echo "::set-output name=version::$(. envFile && echo $version)"
+              && echo "::set-output name=filename::$(. envFile && echo $filename)" \
+              && echo "::set-output name=version::$(. envFile && echo $version)" \
               && . envFile && docker cp $id:$fullname - > ./$filename \
               && docker stop $id \
               && docker rm -v $id'
