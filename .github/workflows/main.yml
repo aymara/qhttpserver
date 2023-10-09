@@ -12,58 +12,6 @@ env:
 
 jobs:
 
-
-  debian9_qhttpserver:
-    name: "Build the package for Debian 9"
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@v1.2.0
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: false
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: false
-          swap-storage: true
-
-      - name: Build image
-        run: docker build -f ./Dockerfile-debian9.4 -t aymara/qhttpserver-debian9.4:build .
-      - name: Extract package and version number from docker iamge
-        id: extract
-        shell: bash
-        run: |
-             dockerImage="aymara/qhttpserver-debian9.4:build" 
-             packageDir="/usr/share/apps/qhttpserver/packages/"
-             cicd/extract_package.sh
-      - name: Create release
-        uses: ncipollo/release-action@v1.13.0
-        id: create_release
-        with:
-          draft: false
-          prerelease: false
-          name: ${{ steps.extract.outputs.verion }}
-          tag: ${{ steps.extract.outputs.version }}
-          allowUpdates: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.extract.outputs.filename }}
-          asset_name: ${{ steps.extract.outputs.filename }}
-          asset_content_type: application/vnd.debian.binary-package
-
   debian11_qhttpserver:
     name: "Build the package for Debian 11"
     runs-on: ubuntu-latest
