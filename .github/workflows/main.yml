@@ -60,6 +60,7 @@ jobs:
           prerelease: false
           release_name: ${{ steps.extract.outputs.verion }}
           tag_name: ${{ steps.extract.outputs.version }}
+          allowUpdates: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload package
@@ -123,6 +124,7 @@ jobs:
           prerelease: false
           release_name: ${{ steps.extract.outputs.verion }}
           tag_name: ${{ steps.extract.outputs.version }}
+          allowUpdates: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload package
