@@ -7,20 +7,6 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  # MANYLINUX_TAG: "2022-10-25-fbea779"
-  # github.repository as <account>/<repo>
-  # PYTHON_VERSION: "3.7"
-  # PYTHON_SHORT_VERSION: "cp37-cp37m"
-  # PYTHON_FULL_VERSION: "3.7.13"
-  # QT_VERSION_MAJOR: "5"
-  # QT_VERSION_MINOR: "15"
-  # QT_VERSION_PATCH: "2"
-  # QT_VERSION: "5.15"
-  # QT_FULL_VERSION: "5.15.2"
-  # PYSIDE_VERSION: "2"
-  # LLVM_VERSION: "14.0.6"
-  # GCC_VERSION: "10.1.0"
-
 
 jobs:
 
@@ -29,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Free Disk Space (Ubuntu)
@@ -51,8 +36,7 @@ jobs:
         
       - name: Extract package and version number from docker iamge
         id: extract
-        shell: bash
-        run: dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
+        run: bash -c 'dockerImage="aymara/qhttpserver-ubuntu22.04:build" \
               && id=$(docker run -d "$dockerImage" sleep infinity) \
               && echo -n "export fullname=/usr/share/apps/qhttpserver/packages/" > ./envFile \
               && docker exec $id ls /usr/share/apps/qhttpserver/packages/ >> ./envFile \
@@ -64,9 +48,9 @@ jobs:
               && echo "::set-output name=version::$(. envFile && echo $version)"
               && . envFile && docker cp $id:$fullname - > ./$filename \
               && docker stop $id \
-              && docker rm -v $id
+              && docker rm -v $id'
         
-      - name: release
+      - name: Create release
         uses: actions/create-release@v1
         id: create_release
         with:
