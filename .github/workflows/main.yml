@@ -50,7 +50,7 @@ jobs:
              echo "::set-output name=version::$(. envFile && echo $version)"
              . envFile && docker cp $id:$fullname - > ./$filename
              docker stop $id
-             docker rm -v $id'
+             docker rm -v $id
         
       - name: Create release
         uses: actions/create-release@v1
