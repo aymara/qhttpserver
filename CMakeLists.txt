@@ -110,6 +110,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Network)
 set(Qt6_LIBRARIES  Qt6::Core Qt6::Network )
+qt_standard_project_setup()
 message("Found Qt6 ${Qt6Core_VERSION}")
 
 message("\n\n\n{Qt6_LIBRARIES}=${Qt6_LIBRARIES} ")

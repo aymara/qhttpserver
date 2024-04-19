@@ -8,7 +8,7 @@ SET(œ_EXE_SRCS
 
 add_executable(bodydata_server ${bodydata_EXE_SRCS})
 
-target_link_libraries(bodydata_server qhttpserver ${Qt5_LIBRARIES})
+target_link_libraries(bodydata_server qhttpserver ${Qt6_LIBRARIES})
 
 add_test(
   NAME bodydata_Test

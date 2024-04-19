@@ -8,7 +8,7 @@ SET(helloworld_EXE_SRCS
 
 add_executable(helloworld_server ${helloworld_EXE_SRCS})
 
-target_link_libraries(helloworld_server qhttpserver ${Qt5_LIBRARIES})
+target_link_libraries(helloworld_server qhttpserver ${Qt6_LIBRARIES})
 
 add_test(
   NAME helloworld_Test

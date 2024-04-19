@@ -15,7 +15,7 @@ SET(qhttpserver_LIB_SRCS
 
 add_library(qhttpserver SHARED ${qhttpserver_LIB_SRCS})
 
-target_link_libraries(qhttpserver ${Qt5_LIBRARIES})
+target_link_libraries(qhttpserver ${Qt6_LIBRARIES})
 
 install(TARGETS qhttpserver DESTINATION ${LIB_INSTALL_DIR})
 

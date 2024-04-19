@@ -8,7 +8,7 @@ SET(greeting_EXE_SRCS
 
 add_executable(greeting_server ${greeting_EXE_SRCS})
 
-target_link_libraries(greeting_server qhttpserver ${Qt5_LIBRARIES})
+target_link_libraries(greeting_server qhttpserver ${Qt6_LIBRARIES})
 
 add_test(
   NAME greeting_Test
