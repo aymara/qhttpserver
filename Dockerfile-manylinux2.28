@@ -1,0 +1,36 @@
+FROM aymara/manylinux_2_28_with_qt6.5:latest as aymara_manylinux_2_28_with_qt
+
+ARG MANYLINUX_TAG
+FROM quay.io/pypa/manylinux_2_28_x86_64:2022-10-25-fbea779
+
+COPY --from=aymara_manylinux_2_28_with_qt /opt /opt
+COPY --from=aymara_manylinux_2_28_with_qt /usr/local /usr/local
+
+RUN yum install -y wget gcc-toolset-10.x86_64 ninja-build --nogpgcheck
+
+RUN install -d /src/qhttpserver
+COPY . /src/qhttpserver
+#COPY docs /src/qhttpserver
+#COPY LICENSE /src/qhttpserver
+#COPY examples /src/qhttpserver
+#COPY QHttpServerConfig-src.cmake /src/qhttpserver
+#COPY README.md /src/qhttpserver
+#COPY src /src/qhttpserver
+#COPY CMakeLists.txt /src/qhttpserver
+#COPY http-parser  /src/qhttpserver
+#COPY SystemSpecificInformations.cmake /src/qhttpserver
+
+RUN install -d /src/qhttpserver/build
+ 
+# Build
+WORKDIR /src/qhttpserver/build
+RUN cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ..
+RUN ninja all && ninja package
+RUN echo "export packagefile=`find /src/qhttpserver/build/ -maxdepth 1 -name *.tar.gz`" > /envfile
+RUN echo "export fullname=\$(basename -- \$packagefile)" >> /envfile
+RUN echo "export extension=\${fullname##*.}" >> /envfile
+RUN echo "export filename=\${fullname%.*}" >> /envfile
+RUN cat /envfile 
+RUN source /envfile && install -D ${packagefile} "/usr/share/apps/qhttpserver/packages/${filename}-manylinux_2_28.deb"
+
+
