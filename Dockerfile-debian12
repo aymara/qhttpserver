@@ -7,7 +7,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y -qq && apt-get install -y apt-utils wget bzip2 git gcc g++ cmake cmake-data ninja-build qt6-base-dev-tools qt6-declarative-dev packaging-dev -qq
 RUN mkdir -p /src/
 COPY . /src/qhttpserver
-#RUN git clone https://github.com/aymara/qhttpserver /src/qhttpserver
 
 RUN mkdir -p /src/qhttpserver/build
  
