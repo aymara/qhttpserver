@@ -91,9 +91,9 @@ set(CMAKE_PREFIX_PATH
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -lpthread")
 
-# It is necessary to define Qt5_INSTALL_DIR in your environment.
+# It is necessary to define Qt6_INSTALL_DIR in your environment.
 set(CMAKE_PREFIX_PATH  
-  "$ENV{Qt5_INSTALL_DIR}"
+  "$ENV{Qt6_INSTALL_DIR}"
   "${CMAKE_PREFIX_PATH}" 
 )
 
@@ -108,15 +108,15 @@ endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-find_package(Qt5 REQUIRED COMPONENTS Core Network)
-set(Qt5_LIBRARIES  Qt5::Core Qt5::Network )
-message("Found Qt5 ${Qt5Core_VERSION}")
+find_package(Qt6 REQUIRED COMPONENTS Core Network)
+set(Qt6_LIBRARIES  Qt6::Core Qt6::Network )
+message("Found Qt6 ${Qt6Core_VERSION}")
 
-message("\n\n\n{Qt5_LIBRARIES}=${Qt5_LIBRARIES} ")
+message("\n\n\n{Qt6_LIBRARIES}=${Qt6_LIBRARIES} ")
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-  get_target_property(QtCore_location Qt5::Core LOCATION)
-  get_target_property(QtNetwork_location Qt5::Network LOCATION)
+  get_target_property(QtCore_location Qt6::Core LOCATION)
+  get_target_property(QtNetwork_location Qt6::Network LOCATION)
   install(FILES ${QtCore_location}
                 ${QtNetwork_location}
           DESTINATION ${LIB_INSTALL_DIR})

@@ -13,8 +13,8 @@ env:
 jobs:
 
   #========================================================================
-  debian11_qhttpserver:
-    name: "Build the package for Debian 11"
+  debian12_qhttpserver:
+    name: "Build the package for Debian 12"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,12 +33,12 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Build image
-        run: docker build -f ./Dockerfile-debian11 -t aymara/qhttpserver-debian11:build .
+        run: docker build -f ./Dockerfile-debian12 -t aymara/qhttpserver-debian12:build .
       - name: Extract package and version number from docker image
         id: extract
         shell: bash
         run: |
-             dockerImage="aymara/qhttpserver-debian11:build" 
+             dockerImage="aymara/qhttpserver-debian12:build"
              packageDir="/usr/share/apps/qhttpserver/packages/"
              cicd/extract_package.sh $dockerImage $packageDir $GITHUB_OUTPUT
       - name: Upload nightly build package
