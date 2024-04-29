@@ -9,6 +9,7 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  QT_VERSION: "6.5"
 
 jobs:
 
@@ -136,6 +137,6 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Build image
-        run: docker build -f ./Dockerfile-manylinux2.28  -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
+        run: docker build -f ./Dockerfile-manylinux2.28 -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
       - name: "Push image"
         run: docker push aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest
