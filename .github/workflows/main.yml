@@ -129,30 +129,6 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Build image
-        run: docker build -f ./Dockerfile-manylinux2.28  -t aymara/qhttpserver-manylinux2.28:build .
-      - name: Extract package and version number from docker image
-        id: extract
-        shell: bash
-        run: |
-             dockerImage="aymara/qhttpserver-manylinux2.28:build" 
-             packageDir="/usr/share/apps/qhttpserver/packages/"
-             cicd/extract_package.sh $dockerImage $packageDir $GITHUB_OUTPUT
-      - name: Upload nightly build package
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        shell: bash
-        run: |
-          tagName=${{ steps.extract.outputs.version }}-nightly
-          gh release create --prerelease ${tagName} || /bin/true
-          gh release upload ${tagName} --clobber ./${{ steps.extract.outputs.filename }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload release package
-        uses: softprops/action-gh-release@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        with:
-          name: ${{ steps.extract.outputs.version }}
-          files: |
-            ./${{ steps.extract.outputs.filename }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+        run: docker build -f ./Dockerfile-manylinux2.28  -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
+      - name: "Push image"
+        run: docker push aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest
