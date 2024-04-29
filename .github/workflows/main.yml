@@ -130,5 +130,12 @@ jobs:
           swap-storage: true
       - name: Build image
         run: docker build -f ./Dockerfile-manylinux2.28  -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
+   -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.AYMARA_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.AYMARA_DOCKERHUB_TOKEN }}
+
       - name: "Push image"
         run: docker push aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest
