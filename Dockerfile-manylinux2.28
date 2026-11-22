@@ -1,4 +1,7 @@
-FROM aymara/manylinux_2_28_with_qt6.5:latest as aymara_manylinux_2_28_with_qt
+# The Qt of the base image (aymara/lima's build-qt6.yml builds it), passed by
+# the workflow
+ARG QT_VERSION=6.5
+FROM aymara/manylinux_2_28_with_qt${QT_VERSION}:latest as aymara_manylinux_2_28_with_qt
 
 ARG MANYLINUX_TAG
 FROM quay.io/pypa/manylinux_2_28_x86_64:2022-10-25-fbea779

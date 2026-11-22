@@ -4,12 +4,16 @@ on:
     - master
     tags:
     - '*'
+  # Build the images on demand, e.g. for a new Qt version of LIMA's manylinux
+  # image (aymara/lima's build-qt6.yml)
+  workflow_dispatch:
 
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  QT_VERSION: "6.5"
+  # The Qt of aymara/lima's manylinux images (aymara/manylinux_2_28_with_qt<x.y>)
+  QT_VERSION: "6.9"
 
 jobs:
 
@@ -137,6 +141,6 @@ jobs:
           large-packages: false
           swap-storage: true
       - name: Build image
-        run: docker build -f ./Dockerfile-manylinux2.28 -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
+        run: docker build -f ./Dockerfile-manylinux2.28 --build-arg QT_VERSION="${QT_VERSION}" -t aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest .
       - name: "Push image"
         run: docker push aymara/qhttpserver-manylinux2.28-qt${QT_VERSION}:latest
